@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda de Libros</title>
+    <link rel="stylesheet" href="/css/libros.css">
+</head>
+<body>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+    <div class="header">
+        <h1>Búsqueda de Libros</h1>
+    </div>
+    
+    <div class="container">
+        <div class="navigation-buttons">
+            <a href="/home" class="back-button">Volver al inicio</a>
+            <a href="/favoritos" class="favorites-link">Ver mis favoritos</a>
+        </div>
+        <div class="search-section">
+            <h2 class="search-title">Buscar Libros</h2>
+            <div class="search-form">
+                <div class="form-group">
+                    <label for="title">Título</label>
+                    <input type="text" id="title" placeholder="Ej: El señor de los anillos">
+                </div>
+                <div class="form-group">
+                    <label for="author">Autor</label>
+                    <input type="text" id="author" placeholder="Ej: Gabriel García Márquez">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Categoría</label>
+                    <select id="subject">
+                        <option value="">Todas las categorías</option>
+                        <option value="fiction">Ficción</option>
+                        <option value="fantasy">Fantasía</option>
+                        <option value="science_fiction">Ciencia Ficción</option>
+                        <option value="romance">Romance</option>
+                        <option value="thriller">Suspense</option>
+                        <option value="mystery">Misterio</option>
+                        <option value="horror">Terror</option>
+                        <option value="history">Historia</option>
+                        <option value="biography">Biografía</option>
+                        <option value="self_help">Autoayuda</option>
+                    </select>
+                </div>
+                <button id="searchButton" class="search-button">Buscar</button>
+            </div>
+        </div>
+        
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Buscando libros...</p>
+        </div>
+        
+        <div id="resultsSection" class="results-section" style="display: none;">
+            <h2 class="results-title">Resultados de la búsqueda</h2>
+            <div id="bookGrid" class="book-grid">
+                <!-- Los resultados de búsqueda se mostrarán aquí -->
+            </div>
+            
+            <div id="pagination" class="pagination">
+                <!-- La paginación se generará dinámicamente -->
+            </div>
+        </div>
+        
+        <div id="noResults" class="no-results">
+            <h3>No se encontraron resultados para tu búsqueda.</h3>
+            <p>Intenta con otros términos o criterios de búsqueda.</p>
+        </div>
+        
+        
+    </div>
+    
+    <!-- Toast para mensajes -->
+    <div id="toast" class="toast">Mensaje</div>
+    
+    <script src="/js/books.js"></script>
+    <script src="/js/theme.js"></script>
+</body>
+</html>

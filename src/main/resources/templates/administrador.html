@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Usuarios</title>
+    <link rel="stylesheet" href="/css/administrador.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+    <div class="header">
+        <h1>Sistema de Recomendaciones</h1>
+        <p>Panel de Administración</p>
+    </div>
+    
+    <div class="container">
+        <div class="admin-header">
+            <h2>Gestión de Usuarios</h2>
+            <a href="/admin/usuarios/nuevo" class="btn btn-nuevo">Nuevo Usuario</a>
+        </div>
+        
+        <!-- Mensaje de resultado -->
+        <div th:if="${mensaje}" class="mensaje" th:classappend="${tipoMensaje == 'error'} ? 'mensaje-error' : 'mensaje-exito'">
+            <p th:text="${mensaje}"></p>
+        </div>
+        
+        <!-- Tabla de Usuarios -->
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Roles</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="usuario : ${usuarios}">
+                        <td th:text="${usuario.ID}"></td>
+                        <td class="user-image">
+                            <div class="avatar">
+                                <img th:if="${usuario.image != null}" th:src="@{'/usuario/imagen/' + ${usuario.ID}}" alt="Imagen de usuario">
+                                <span th:if="${usuario.image == null}">👤</span>
+                            </div>
+                        </td>
+                        <td th:text="${usuario.name}"></td>
+                        <td th:text="${usuario.email}"></td>
+                        <td>
+                            <div class="role-tags">
+                                <span th:each="rol : ${usuario.roles}" class="role-tag" 
+                                      th:classappend="${rol.name == 'ROLE_ADMIN'} ? 'admin-role' : 'user-role'"
+                                      th:text="${rol.name == 'ROLE_ADMIN'} ? 'Admin' : 'Usuario'"></span>
+                            </div>
+                        </td>
+                        <td class="actions">
+                            <a th:href="@{'/admin/usuarios/' + ${usuario.ID}}" class="btn btn-edit">Editar</a>
+                            <button class="btn btn-delete" th:data-id="${usuario.ID}" onclick="confirmarEliminacion(this.getAttribute('data-id'))">Eliminar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="navigation-buttons">
+            <a href="/home" class="btn btn-back">Volver al Inicio</a>
+        </div>
+    </div>
+    
+    <!-- Modal de confirmación para eliminar usuario -->
+    <div id="modalEliminar" class="modal">
+        <div class="modal-content">
+            <h3>Confirmar Eliminación</h3>
+            <p>¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.</p>
+            <div class="modal-buttons">
+                <button id="btnCancelarEliminar" class="btn btn-secondary">Cancelar</button>
+                <form id="formEliminar" method="post">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Modal de eliminación
+            const modal = document.getElementById('modalEliminar');
+            const btnCancelar = document.getElementById('btnCancelarEliminar');
+            const formEliminar = document.getElementById('formEliminar');
+            
+            // Cerrar modal al hacer clic en Cancelar
+            btnCancelar.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Cerrar modal al hacer clic fuera del contenido
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+        
+        // Función para confirmar eliminación
+        function confirmarEliminacion(userId) {
+            const modal = document.getElementById('modalEliminar');
+            const formEliminar = document.getElementById('formEliminar');
+            
+            // Establecer la acción del formulario
+            formEliminar.action = '/admin/usuarios/eliminar/' + userId;
+            
+            // Mostrar modal
+            modal.style.display = 'flex';
+        }
+    </script>
+    <script src="/js/theme.js"></script>
+</body>
+</html>

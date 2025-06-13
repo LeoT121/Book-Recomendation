@@ -1,0 +1,21 @@
+/* favoritos.css - Dark Theme Additions */
+[data-theme="dark"] .empty-favorites {
+    color: var(--black);
+}
+
+[data-theme="dark"] .book-actions .book-button {
+    color: var(--black);
+}
+
+[data-theme="dark"] .remove-button {
+    background-color: var(--danger-color);
+    color: var(--white);
+}
+
+[data-theme="dark"] .remove-button:hover {
+    background-color: #c0392b;
+}
+
+[data-theme="dark"] .date-added {
+    color: var(--gray);
+}

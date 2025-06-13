@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Libros Favoritos</title>
+    <link rel="stylesheet" href="/css/libros.css">
+    <link rel="stylesheet" href="/css/favoritos.css">
+</head>
+<body>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+    <div class="header">
+        <h1>Mis Libros Favoritos</h1>
+    </div>
+    
+    <div class="container">
+        <div class="navigation-buttons">
+            <a href="/home" class="back-button">Volver al inicio</a>
+            <a href="/libros" class="back-button">Buscar más libros</a>
+        </div>
+        <h2 class="page-title">Libros que has marcado como favoritos</h2>
+        
+        <div th:if="${favoritos.isEmpty()}" class="empty-favorites">
+            <h3>No tienes libros favoritos aún</h3>
+            <p>Explora el catálogo y agrega libros a tus favoritos para verlos aquí.</p>
+        </div>
+        <div th:unless="${favoritos.isEmpty()}" class="book-grid">
+            <div class="book-card" th:each="favorito : ${favoritos}">
+                <div class="book-cover">
+                    <img th:if="${favorito.imageUrl != null}" th:src="${favorito.imageUrl}" th:alt="${favorito.title}" onerror="this.src='/images/placeholder-image.jpg'">
+                    <img th:unless="${favorito.imageUrl != null}" src="/images/placeholder-image.jpg" alt="Sin portada">
+                </div>
+                <div class="book-info" name="authors" th:data-idauthor="${favorito.author}">
+                    <h3 class="book-title" th:text="${favorito.title}">Título del libro</h3>
+                    <p class="book-author" th:text="${favorito.author != null ? favorito.author : 'Autor desconocido'}">Autor del libro</p>
+                    <p class="date-added" th:text="${'Agregado el ' + #temporals.format(favorito.date, 'dd/MM/yyyy')}">Fecha de agregado</p>
+                    <div class="book-actions">
+                        <a class="book-button details-button" th:href="${'https://openlibrary.org' + favorito.bookId}" target="_blank">Ver detalles</a>
+                        <button class="book-button remove-button" th:data-id="${favorito.id}" onclick="eliminarFavorito(this.getAttribute('data-id'))">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div id="resultsSection" class="results-section" style="display: none;">
+            <h2 class="results-title">Resultados de la búsqueda</h2>
+            <div id="bookGrid" class="book-grid">
+                <!-- Los resultados de búsqueda se mostrarán aquí -->
+            </div>
+            
+            <div id="pagination" class="pagination">
+                <!-- La paginación se generará dinámicamente -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function eliminarFavorito(libroId) {
+            if (confirm('¿Estás seguro de que deseas eliminar este libro de tus favoritos?')) {
+                fetch(`/api/libros/favoritos/eliminar/${libroId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.mensaje) {
+                        alert(data.mensaje);
+                        window.location.reload();
+                    } else if (data.error) {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ocurrió un error al eliminar el libro de favoritos');
+                });
+            }
+        }
+    </script>
+    <script src="/js/theme.js"></script>
+     <script src="/js/booksfavorites.js"></script>
+</body>
+</html>

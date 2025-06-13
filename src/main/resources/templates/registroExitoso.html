@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Exitoso</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Registro exitoso</h1>
+        <p>¡Te has registrado correctamente! Aquí están tus datos:</p>
+        <p><strong>Nombre:</strong> <span th:text="${usuario.name}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${usuario.email}"></span></p>
+        <a href="/login">Ir a login</a>
+    </div>
+</body>
+</html>

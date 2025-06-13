@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Recomendaciones</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+    <div class="header">
+        <h1>Sistema de Recomendaciones</h1>
+    </div>
+    
+    <div class="container">
+        <h1>Bienvenido</h1>
+        <p class="welcome-message" sec:authentication="name">Usuario</p>
+        
+        <div class="menu-options">
+            <a href="/libros" class="menu-button">Buscar Libros</a>
+            <a href="/favoritos" class="menu-button favorites-button">Mis Libros Favoritos</a>
+            <a href="/perfil" class="menu-button">Mi Perfil</a>
+            
+            <!-- Mostrar el botón de administración solo a los usuarios con rol ADMIN -->
+            <a sec:authorize="hasRole('ROLE_ADMIN')" href="/admin/usuarios" class="menu-button admin-button">Administración de Usuarios</a>
+        </div>
+        
+        <a href="/logout" class="logout">Cerrar Sesión</a>
+    </div>
+    <script src="/js/theme.js"></script>
+</body>
+</html>
